@@ -1,0 +1,25 @@
+<?php
+/**
+ * @file
+ * Install schema for the arbitrary pair module
+ */
+
+/**
+ * Implements hook_schema().
+ */
+function arb_pair_field_schema ($field) {
+  return array(
+    'columns' => array(
+      'arb_pair_val_1' => array(
+        'type'     => 'varchar',
+        'length'   => 255,
+        'not null' => FALSE,
+      ),
+      'arb_pair_val_2' => array(
+        'type'     => 'varchar',
+        'length'   => 255,
+        'not null' => FALSE,
+      ),
+    ),
+  );
+}

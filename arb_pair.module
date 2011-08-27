@@ -1,0 +1,150 @@
+<?php
+/**
+ * @file
+ * A field type that allows the creation of arbitrary pairs of data.
+ */
+
+/**
+ * ************************************************************
+ * Field information
+ * ************************************************************
+ */
+
+/**
+ * Implements hook_field_info().
+ */
+function arb_pair_field_info () {
+  return array(
+    'arb_pair' => array(
+      'label'             => t('Arbitrary pair'),
+      'description'       => t('A field that can contain arbitrary pair data'),
+      'default_widget'    => 'arb_pair_widget',
+      'default_formatter' => 'arb_pair_formatter',
+    ),
+  );
+}
+
+/**
+ * Implements hook_field_validate().
+ */
+function arb_pair_field_validate ($entity_type, $entity, $field, $instance, $langcode, $items, &$errors) {
+  // do nothing
+}
+
+/**
+ * Implements hook_field_is_empty().
+ */
+function arb_pair_field_is_empty ($item, $field) {
+  return ( empty($item['arb_pair_val_1']) and empty($item['arb_pair_val_2']) );
+}
+
+/**
+ * ************************************************************
+ * Widget (entry) information
+ * ************************************************************
+ */
+
+/**
+ * Implements hook_field_widget_info().
+ */
+function arb_pair_field_widget_info () {
+  return array(
+    'arb_pair_widget' => array(
+      'label'       => t('Arbitrary pair entry field'),
+      'field types' => array('arb_pair'),
+    ),
+  );
+}
+
+/**
+ * Implements hook_field_widget_form().
+ */
+function arb_pair_field_widget_form (&$form, &$form_state, $field, $instance, $langcode, $items, $delta, $element) {
+  $val1 = isset($items[$delta]['arb_pair_val_1']) ? $items[$delta]['arb_pair_val_1'] : '';
+  $val2 = isset($items[$delta]['arb_pair_val_2']) ? $items[$delta]['arb_pair_val_2'] : '';
+
+  $widget = array(
+    '#type' => 'container',
+    '#tree' => TRUE,
+    '#attributes' => array('class' => array('arb_pair_widget_attribute')),
+    '#attached' => array(
+      'css' => array(drupal_get_path('module', 'arb_pair') . '/arb_pair.css'),
+    ),
+    'arb_pair_val_1' => $element + array(
+      '#type' => 'textfield',
+      '#size' => 30,
+      '#default_value' => $val1,
+      '#maxlength' => 255,
+    ),
+    'arb_pair_val_2' => $element + array(
+      '#type' => 'textfield',
+      '#size' => 30,
+      '#default_value' => $val2,
+      '#maxlength' => 255,
+    )
+  );
+
+  return $widget;
+}
+
+/**
+ * ************************************************************
+ * Formatter (display) information
+ * ************************************************************
+ */
+
+/**
+ * Implements hook_field_formatter_info().
+ */
+function arb_pair_field_formatter_info () {
+  return array(
+    'arb_pair_formatter' => array(
+      'label'       => t('Formatter for arbitrary pair field'),
+      'field types' => array('arb_pair'),
+    )
+  );
+}
+
+/**
+ * Implements hook_field_formatter_view().
+ */
+function arb_pair_field_formatter_view ($entity_type, $entity, $field, $instance, $langcode, $items, $display) {
+  $element = array();
+
+  $element = array(
+    '#theme' => 'arb_pair_display',
+    'items' => $items,
+  );
+
+  return $element;
+}
+
+/**
+ * ************************************************************
+ * Theme information
+ * ************************************************************
+ */
+
+function arb_pair_theme () {
+  return array(
+    'arb_pair_display' => array(
+      //'render element' => 'pairs',
+      'variables' => array('items' => NULL),
+    ),
+  );
+}
+
+function theme_arb_pair_display ($variables) {
+  $rows = array();
+  foreach ($variables['items'] as $r) {
+    $rows[] = array(
+      $r['arb_pair_val_1'],
+      $r['arb_pair_val_2'],
+    );
+  }
+
+  return theme('table', array(
+    'rows' => $rows,
+    'attributes' => array('class' => array('arb_pair_table')),
+  ));
+}
