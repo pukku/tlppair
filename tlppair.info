@@ -1,4 +1,4 @@
-name = Arbitrary Pair
+name = TLP Pair
 description = a field module that allows you to create pairs of data
 core = 7.x
 dependencies[] = field

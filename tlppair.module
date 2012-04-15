@@ -13,13 +13,13 @@
 /**
  * Implements hook_field_info().
  */
-function arb_pair_field_info () {
+function tlppair_field_info () {
   return array(
-    'arb_pair' => array(
+    'tlppair' => array(
       'label'             => t('Arbitrary pair'),
-      'description'       => t('A field that can contain arbitrary pair data'),
-      'default_widget'    => 'arb_pair_widget',
-      'default_formatter' => 'arb_pair_formatter',
+      'description'       => t('A field that can contain pair data'),
+      'default_widget'    => 'tlppair_widget',
+      'default_formatter' => 'tlppair_formatter',
     ),
   );
 }
@@ -27,15 +27,15 @@ function arb_pair_field_info () {
 /**
  * Implements hook_field_validate().
  */
-function arb_pair_field_validate ($entity_type, $entity, $field, $instance, $langcode, $items, &$errors) {
+function tlppair_field_validate ($entity_type, $entity, $field, $instance, $langcode, $items, &$errors) {
   // do nothing
 }
 
 /**
  * Implements hook_field_is_empty().
  */
-function arb_pair_field_is_empty ($item, $field) {
-  return ( empty($item['arb_pair_val_1']) and empty($item['arb_pair_val_2']) );
+function tlppair_field_is_empty ($item, $field) {
+  return ( empty($item['tlppair_val_1']) and empty($item['tlppair_val_2']) );
 }
 
 /**
@@ -47,11 +47,11 @@ function arb_pair_field_is_empty ($item, $field) {
 /**
  * Implements hook_field_widget_info().
  */
-function arb_pair_field_widget_info () {
+function tlppair_field_widget_info () {
   return array(
-    'arb_pair_widget' => array(
+    'tlppair_widget' => array(
       'label'       => t('Arbitrary pair entry field'),
-      'field types' => array('arb_pair'),
+      'field types' => array('tlppair'),
     ),
   );
 }
@@ -59,24 +59,24 @@ function arb_pair_field_widget_info () {
 /**
  * Implements hook_field_widget_form().
  */
-function arb_pair_field_widget_form (&$form, &$form_state, $field, $instance, $langcode, $items, $delta, $element) {
-  $val1 = isset($items[$delta]['arb_pair_val_1']) ? $items[$delta]['arb_pair_val_1'] : '';
-  $val2 = isset($items[$delta]['arb_pair_val_2']) ? $items[$delta]['arb_pair_val_2'] : '';
+function tlppair_field_widget_form (&$form, &$form_state, $field, $instance, $langcode, $items, $delta, $element) {
+  $val1 = isset($items[$delta]['tlppair_val_1']) ? $items[$delta]['tlppair_val_1'] : '';
+  $val2 = isset($items[$delta]['tlppair_val_2']) ? $items[$delta]['tlppair_val_2'] : '';
 
   $widget = array(
     '#type' => 'container',
     '#tree' => TRUE,
-    '#attributes' => array('class' => array('arb_pair_widget_attribute')),
+    '#attributes' => array('class' => array('tlppair_widget_attribute')),
     '#attached' => array(
-      'css' => array(drupal_get_path('module', 'arb_pair') . '/arb_pair.css'),
+      'css' => array(drupal_get_path('module', 'tlppair') . '/tlppair.css'),
     ),
-    'arb_pair_val_1' => $element + array(
+    'tlppair_val_1' => $element + array(
       '#type' => 'textfield',
       '#size' => 30,
       '#default_value' => $val1,
       '#maxlength' => 255,
     ),
-    'arb_pair_val_2' => $element + array(
+    'tlppair_val_2' => $element + array(
       '#type' => 'textfield',
       '#size' => 30,
       '#default_value' => $val2,
@@ -96,11 +96,11 @@ function arb_pair_field_widget_form (&$form, &$form_state, $field, $instance, $l
 /**
  * Implements hook_field_formatter_info().
  */
-function arb_pair_field_formatter_info () {
+function tlppair_field_formatter_info () {
   return array(
-    'arb_pair_formatter' => array(
-      'label'       => t('Formatter for arbitrary pair field'),
-      'field types' => array('arb_pair'),
+    'tlppair_formatter' => array(
+      'label'       => t('Formatter for pair field'),
+      'field types' => array('tlppair'),
     )
   );
 }
@@ -108,11 +108,11 @@ function arb_pair_field_formatter_info () {
 /**
  * Implements hook_field_formatter_view().
  */
-function arb_pair_field_formatter_view ($entity_type, $entity, $field, $instance, $langcode, $items, $display) {
+function tlppair_field_formatter_view ($entity_type, $entity, $field, $instance, $langcode, $items, $display) {
   $element = array();
 
   $element = array(
-    '#theme' => 'arb_pair_display',
+    '#theme' => 'tlppair_display',
     'items' => $items,
   );
 
@@ -125,26 +125,26 @@ function arb_pair_field_formatter_view ($entity_type, $entity, $field, $instance
  * ************************************************************
  */
 
-function arb_pair_theme () {
+function tlppair_theme () {
   return array(
-    'arb_pair_display' => array(
+    'tlppair_display' => array(
       //'render element' => 'pairs',
       'variables' => array('items' => NULL),
     ),
   );
 }
 
-function theme_arb_pair_display ($variables) {
+function theme_tlppair_display ($variables) {
   $rows = array();
   foreach ($variables['items'] as $r) {
     $rows[] = array(
-      $r['arb_pair_val_1'],
-      $r['arb_pair_val_2'],
+      $r['tlppair_val_1'],
+      $r['tlppair_val_2'],
     );
   }
 
   return theme('table', array(
     'rows' => $rows,
-    'attributes' => array('class' => array('arb_pair_table')),
+    'attributes' => array('class' => array('tlppair_table')),
   ));
 }
